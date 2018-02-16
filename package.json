@@ -1,0 +1,11 @@
+{
+  "name": "shipt",
+  "version": "1.0.0",
+  "description": "Instructions",
+  "main": "index.js",
+  "scripts": {
+    "start": "nodemon index.js"
+  },
+  "author": "",
+  "license": "ISC"
+}
