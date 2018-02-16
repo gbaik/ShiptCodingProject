@@ -7,5 +7,10 @@
     "start": "nodemon index.js"
   },
   "author": "",
-  "license": "ISC"
+  "license": "ISC",
+  "dependencies": {
+    "bookshelf": "^0.12.1",
+    "knex": "^0.14.3",
+    "pg": "^7.4.1"
+  }
 }
