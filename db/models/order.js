@@ -3,13 +3,13 @@ const db = require('../');
 const Order = db.Model.extend({
   tableName: 'order',
   customer: function() {
-    return this.belongsTo(Customer);
+    return this.belongsTo('Customer');
   },
   status: function() {
-    return this.belongsTo(Status);
+    return this.belongsTo('Status');
   },
   product: function() {
-    return this.hasMany(OrderProduct);
+    return this.hasMany('OrderProduct');
   }
 });
 

@@ -3,7 +3,7 @@ const db = require('../');
 const Category = db.Model.extend({
   tableName: 'category',
   product: function() {
-    return this.hasMany(ProductCategory);
+    return this.hasMany('ProductCategory');
   }
 });
 

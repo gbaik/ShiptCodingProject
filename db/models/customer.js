@@ -3,7 +3,7 @@ const db = require('../');
 const Customer = db.Model.extend({
   tableName: 'customer',
   order: function() {
-    return this.hasMany(Order);
+    return this.hasMany('Order');
   }
 });
 
