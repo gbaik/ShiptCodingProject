@@ -5,8 +5,7 @@ const model = require('../db/models');
 const app = express();
 const port = process.env.PORT || 3000;
 
-app.get('*', function (req, res) {
-
+app.get('/', function (req, res) {
   model.Order.where({id: 1}).fetch({withRelated: ['customer', 'product']})
     .then(data => {
       let customer = data.related('customer').toJSON();
@@ -36,11 +35,48 @@ app.get('*', function (req, res) {
               res.status(500).send(err);
             });
         })
-
-
     })
-
 });
+
+app.get('/:sold', function (req, res) {
+  let start = req.query.start;
+  let end = req.query.end;
+  let output = []
+
+  const getProductName = async (orders) => {
+    for (let [key, value] of Object.entries(orders)) {
+      let product = value.product;
+
+      for (var i = 0; i < product.length; i++) {
+        await model.Product.where({id: product[i].product_id}).fetchAll()
+          .then(data => {
+            let productName = data.toJSON()[0].name;
+
+            output.indexOf(productName) === -1 ? output.push(productName) : false;
+          })
+      }
+    }
+
+    return output;
+  };
+  
+  model.Order.query(qb => {
+    qb.where('ordered_at', '>=', start)
+    qb.andWhere('ordered_at', '<=', end)
+  })
+    .fetchAll({withRelated: ['product']})
+      .then(data => {
+        let orders = data.toJSON();
+
+        getProductName(orders)
+          .then(data => {
+            res.send(data);
+          })
+          .catch(err => {
+            res.status(500).send(err);
+          });
+      })
+})
 
 app.listen(port, _ => {
   console.log(`Server connected to port number: ${port}`);

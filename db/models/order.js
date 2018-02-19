@@ -2,6 +2,7 @@ const db = require('../');
 
 const Order = db.Model.extend({
   tableName: 'order',
+  hasTimestamps: true,
   customer: function() {
     return this.belongsTo('Customer');
   },
