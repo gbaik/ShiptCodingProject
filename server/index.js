@@ -41,7 +41,9 @@ app.get('/', function (req, res) {
 app.get('/:sold', function (req, res) {
   let start = req.query.start;
   let end = req.query.end;
-  let day = req.query.day || 0;
+  let year = Number(req.query.year) * 365;
+  let month = Number(req.query.month) * 31;
+  let soldPerDivider = year || month || req.query.day || 1;
   let output = {};
 
   const getProductName = async (orders) => {
@@ -51,14 +53,14 @@ app.get('/:sold', function (req, res) {
       for (var i = 0; i < products.length; i++) {
         let product = products[i];
         let productId = product.product_id;
-        let amount = product.amount;
+        let amount = Number(product.amount) / soldPerDivider;
 
         await model.Product.where({id: productId}).fetchAll()
           .then(data => {
             let productName = data.toJSON()[0].name;
       
             output[productName] = output[productName] || 0;
-            output[productName] += Number(amount);
+            output[productName] += amount;
           })
       }
     }
