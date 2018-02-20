@@ -12,7 +12,7 @@ app.get('/', function (req, res) {
       let customer = data.related('customer').toJSON();
       let customerId = customer.id;
       let customerFirstName = customer.first_name;
-      let orderNumber = customer.number;
+      let orderNumber = data.toJSON().number;
       let product = data.related('product').toJSON()[0];
       let output = [customerId, customerFirstName];
 
@@ -50,8 +50,6 @@ app.get('/sold', function (req, res) {
   let CSVPath = path.resolve(CSVFileName);
   let output = {};
   let productIdArray = [];
-
-  console.log(CSVPath);
 
   const getProductName = async (orders) => {
     for (let [key, value] of Object.entries(orders)) {
@@ -112,7 +110,7 @@ app.get('/order', function (req, res) {
 
       model.Order.where({customer_id: customerId}).fetchAll()
         .then(data => {
-          res.end(data.toJSON());
+          res.send(data.toJSON());
         })
     })
 })
