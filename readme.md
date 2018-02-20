@@ -1,40 +1,31 @@
-Instructions
+## Install Project Dependencies
+`npm install`
 
-Create a very basic API application, where a customer can have an order that is made up of products.
+## Installing System Dependencies
 
-Tasks
+`brew install postgresql`
 
-Please implement the following stories.
+## Database Initialization
 
-1. A product belongs to many categories. A category has many products. A product can be sold in decimal amounts (such as weights).
+IMPORTANT: ensure `postgres` is running before performing these steps.
 
-2. A customer can have many orders. An order is comprised of many products. An order has a status stating if the order is waiting for delivery, on its way, or delivered.
+### Run Migrations & Data Seeds
 
-3. Write a SQL query to return the results as display below:
+In terminal, from the root directory:
 
-Example
+```
+knex migrate:latest
+knex seed:run
+```
+## Running the App
 
-customer_id customer_first_name category_id category_name number_purchased
+To run server: `yarn run start`
 
-1 John 1 Bouquets 15
+## Assumptions Made
+- 365 Days in a year and 31 days in a month, so that it is easier to break down the products sold at a time.
+- The customer_id customer_first_name category_id category_name number_purchased query returns the 1st order because of unclear instructions.
 
-4. Include the previous result as part of a function in the application. If you are using an ORM, please write the query in your ORM's DSL. Leave the original SQL in a separate file.
-
-5. An API endpoint that accepts a date range and a day, week, or month and returns a breakdown of products sold by quantity per day/week/month.
-
-6. Ability to export the results of #5 to CSV.
-
-7. An API endpoint that returns the orders for a customer.
-
-Additional questions
-
-No coding necessary, explain the concept or sketch your thoughts.
-
-We want to give customers the ability to create lists of products for a one-click ordering of bulk items. How would you design the tables, what are the pros and cons of your approach?
-
-If Shipt knew the exact inventory of stores, and when facing a high traffic and limited supply of a particular item, how do you distribute the inventory among customers checking out?
-
-Best,
-
-Sophia Lawhead
-
+## Future Work
+- Make code more modular and clean up using ES6.
+- Make queries more efficient, possibly use joins instead of nested queries. 
+- Make route paths clearer and add documentation.
