@@ -38,7 +38,7 @@ app.get('/', function (req, res) {
     })
 });
 
-app.get('/:sold', function (req, res) {
+app.get('/sold', function (req, res) {
   let start = req.query.start;
   let end = req.query.end;
   let year = Number(req.query.year) * 365;
@@ -84,6 +84,22 @@ app.get('/:sold', function (req, res) {
             res.status(500).send(err);
           });
       })
+});
+
+app.get('/order', function (req, res) {
+  let customerFirstName = req.query.firstName;
+
+  model.Customer.where({first_name: customerFirstName}).fetch()
+    .then(data => {
+      let customer = data.toJSON();
+      let customerId = customer.id;
+
+      model.Order.where({customer_id: customerId}).fetchAll()
+        .then(data => {
+          res.end(data.toJSON());
+        })
+    })
+
 })
 
 app.listen(port, _ => {
