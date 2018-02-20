@@ -41,18 +41,24 @@ app.get('/', function (req, res) {
 app.get('/:sold', function (req, res) {
   let start = req.query.start;
   let end = req.query.end;
-  let output = []
+  let day = req.query.day || 0;
+  let output = {};
 
   const getProductName = async (orders) => {
     for (let [key, value] of Object.entries(orders)) {
-      let product = value.product;
+      let products = value.product;
+      
+      for (var i = 0; i < products.length; i++) {
+        let product = products[i];
+        let productId = product.product_id;
+        let amount = product.amount;
 
-      for (var i = 0; i < product.length; i++) {
-        await model.Product.where({id: product[i].product_id}).fetchAll()
+        await model.Product.where({id: productId}).fetchAll()
           .then(data => {
             let productName = data.toJSON()[0].name;
-
-            output.indexOf(productName) === -1 ? output.push(productName) : false;
+      
+            output[productName] = output[productName] || 0;
+            output[productName] += Number(amount);
           })
       }
     }
