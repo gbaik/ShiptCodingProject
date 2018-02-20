@@ -46,8 +46,12 @@ app.get('/sold', function (req, res) {
   let month = Number(req.query.month) * 31;
   let soldPerDivider = year || month || req.query.day || 1;
   let exportToCSV = req.query.export === 'true' || false;
+  let CSVFileName = req.query.fileName || 'untitled';
+  let CSVPath = path.resolve(CSVFileName);
   let output = {};
   let productIdArray = [];
+
+  console.log(CSVPath);
 
   const getProductName = async (orders) => {
     for (let [key, value] of Object.entries(orders)) {
@@ -84,7 +88,7 @@ app.get('/sold', function (req, res) {
         getProductName(orders)
           .then(data => {
             if (exportToCSV) {
-                bookshelf.knex.raw(`COPY (SELECT * FROM product WHERE id IN (${[...productIdArray]})) TO '/Users/gideonbaik/Desktop/test.csv' with csv delimiter ','`)
+                bookshelf.knex.raw(`COPY (SELECT * FROM product WHERE id IN (${[...productIdArray]})) TO '${CSVPath}.csv' with csv delimiter ','`)
                   .then(() => {
                     res.end()
                   })  
