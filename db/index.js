@@ -8,8 +8,8 @@ const knex = require('knex')({
   }
 });
 
-const db = require('bookshelf')(knex);
+const bookshelf = require('bookshelf')(knex);
 
-db.plugin('registry');
+bookshelf.plugin('registry');
 
-module.exports = db;
+module.exports = bookshelf;

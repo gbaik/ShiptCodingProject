@@ -1,10 +1,10 @@
-const db = require('../');
+const bookshelf = require('../');
 
-const Category = db.Model.extend({
+const Category = bookshelf.Model.extend({
   tableName: 'category',
   product: function() {
     return this.hasMany('ProductCategory');
   }
 });
 
-module.exports = db.model('Category', Category);
+module.exports = bookshelf.model('Category', Category);

@@ -1,6 +1,6 @@
-const db = require('../');
+const bookshelf = require('../');
 
-const ProductCategory = db.Model.extend({
+const ProductCategory = bookshelf.Model.extend({
   tableName: 'product_category',
   product: function() {
     return this.belongsTo('Product');
@@ -10,4 +10,4 @@ const ProductCategory = db.Model.extend({
   }
 });
 
-module.exports = db.model('ProductCategory', ProductCategory);
+module.exports = bookshelf.model('ProductCategory', ProductCategory);

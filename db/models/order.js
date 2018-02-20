@@ -1,6 +1,6 @@
-const db = require('../');
+const bookshelf = require('../');
 
-const Order = db.Model.extend({
+const Order = bookshelf.Model.extend({
   tableName: 'order',
   hasTimestamps: true,
   customer: function() {
@@ -14,4 +14,4 @@ const Order = db.Model.extend({
   }
 });
 
-module.exports = db.model('Order', Order);
+module.exports = bookshelf.model('Order', Order);

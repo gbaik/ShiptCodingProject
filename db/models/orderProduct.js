@@ -1,6 +1,6 @@
-const db = require('../');
+const bookshelf = require('../');
 
-const OrderProduct = db.Model.extend({
+const OrderProduct = bookshelf.Model.extend({
   tableName: 'order_product',
   order: function() {
     return this.belongsTo('Order');
@@ -10,4 +10,4 @@ const OrderProduct = db.Model.extend({
   }
 });
 
-module.exports = db.model('OrderProduct', OrderProduct);
+module.exports = bookshelf.model('OrderProduct', OrderProduct);

@@ -1,6 +1,6 @@
-const db = require('../');
+const bookshelf = require('../');
 
-const Product = db.Model.extend({
+const Product = bookshelf.Model.extend({
   tableName: 'product',
   order: function() {
     return this.hasMany('OrderProduct');
@@ -10,4 +10,4 @@ const Product = db.Model.extend({
   }
 });
 
-module.exports = db.model('Product', Product);
+module.exports = bookshelf.model('Product', Product);
