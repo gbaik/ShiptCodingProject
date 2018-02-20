@@ -1,6 +1,7 @@
 const express = require('express');
 const path = require('path');
 const model = require('../db/models');
+const bookshelf = require('../db');
 
 const app = express();
 const port = process.env.PORT || 3000;
@@ -44,7 +45,9 @@ app.get('/sold', function (req, res) {
   let year = Number(req.query.year) * 365;
   let month = Number(req.query.month) * 31;
   let soldPerDivider = year || month || req.query.day || 1;
+  let exportToCSV = req.query.export === 'true' || false;
   let output = {};
+  let productIdArray = [];
 
   const getProductName = async (orders) => {
     for (let [key, value] of Object.entries(orders)) {
@@ -55,8 +58,10 @@ app.get('/sold', function (req, res) {
         let productId = product.product_id;
         let amount = Number(product.amount) / soldPerDivider;
 
-        await model.Product.where({id: productId}).fetchAll()
-          .then(data => {
+        productIdArray.push(productId);
+
+        await model.Product.where({id: productId}).fetchAll() 
+          .then(data => {            
             let productName = data.toJSON()[0].name;
       
             output[productName] = output[productName] || 0;
@@ -67,7 +72,7 @@ app.get('/sold', function (req, res) {
 
     return output;
   };
-  
+
   model.Order.query(qb => {
     qb.where('ordered_at', '>=', start)
     qb.andWhere('ordered_at', '<=', end)
@@ -78,6 +83,13 @@ app.get('/sold', function (req, res) {
 
         getProductName(orders)
           .then(data => {
+            if (exportToCSV) {
+                bookshelf.knex.raw(`COPY (SELECT * FROM product WHERE id IN (${[...productIdArray]})) TO '/Users/gideonbaik/Desktop/test.csv' with csv delimiter ','`)
+                  .then(() => {
+                    res.end()
+                  })  
+            } 
+            
             res.send(data);
           })
           .catch(err => {
@@ -99,7 +111,6 @@ app.get('/order', function (req, res) {
           res.end(data.toJSON());
         })
     })
-
 })
 
 app.listen(port, _ => {
